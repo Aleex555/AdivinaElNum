@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,11 +17,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     static ArrayList<Record> records;
+    static public ArrayList<Record> getRecords() {
+        return records;
+    }
     int contador = 0;
     int numeroAleatorio;
     @Override
@@ -34,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         TextView textViewScrollable = findViewById(id.textView3);
         TextView intentos = findViewById(id.textView4);
         records = new ArrayList<Record>();
-        // Afegim alguns exemples
         records.add( new Record(33,"Manolo") );
         records.add( new Record(12,"Pepe") );
         records.add( new Record(42,"Laura") );
@@ -54,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                         contador++;
                         mostrarDialogoAdivinanza();
                         generarNumeroAleatorio();
-                        contador=0;
+
                     }else if(numeroAleatorio>numero1){
                         contador++;
                         intentos.setText("Intentos: "+contador);
@@ -86,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 mostrarDialogoNombre();
             }
         });
@@ -110,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 String nombre = editTextName.getText().toString();
                 records.add(new Record(contador,nombre));
+                contador=0;
                 dialog.dismiss();
             }
         });
@@ -123,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void generarNumeroAleatorio() {
-        // Genera un número aleatorio entre 1 y 100 (ajusta el rango según tus necesidades).
+        // Genera un número aleatorio entre 1 y 100
         Random random = new Random();
         //numeroAleatorio = random.nextInt(100) + 1;
         numeroAleatorio=10;
@@ -132,9 +138,15 @@ public class MainActivity extends AppCompatActivity {
     class Record {
         public int intents;
         public String nom;
-        public Record (int intents, String nom){
-            intents = this.intents;
-            nom = this.nom;
+        public Record(int intents, String nom) {
+            this.intents = intents;
+            this.nom = nom;
+        }
+        public int getIntents() {
+            return intents;
+        }
+        public String getNom() {
+            return nom;
         }
     }
 }
